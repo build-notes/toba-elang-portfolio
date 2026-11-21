@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toba Elang Al Faruq — Personal Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #030014;
+            color: #f8fafc;
+            line-height: 1.65;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* KANVAS KOSMOS LATAR BELAKANG */
+        #cosmos-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 36px 20px 80px;
+        }
+
+        /* TOMBOL SUARA & HUD SEKTOR */
+        .sound-toggle-btn {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 920;
+            background: rgba(15, 23, 42, 0.88);
+            color: #e2e8f0;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .sound-toggle-btn:hover,
+        .sound-toggle-btn.active {
+            background: linear-gradient(135deg, #0284c7, #7c3aed);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.55);
+        }
+
+        .sector-hud {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 920;
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid rgba(168, 85, 247, 0.42);
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-family: monospace;
+            backdrop-filter: blur(8px);
+            pointer-events: none;
+        }
+        .sector-hud-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #7dd3fc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sector-hud-coords {
+            font-size: 0.68rem;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 46px 24px 36px;
+            background: rgba(11, 15, 42, 0.78);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.32);
+            border-radius: 18px;
+            margin-bottom: 26px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        }
+        .hero img {
+            width: 132px;
+            height: 132px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #38bdf8;
+            box-shadow: 0 0 22px rgba(56, 189, 248, 0.5);
+            margin-bottom: 14px;
+            background: #1e293b;
+        }
+        .hero p {
+            font-size: 0.88rem;
+            color: #c4b5fd;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            margin-bottom: 6px;
+        }
+        .hero h1 {
+            font-size: clamp(1.55rem, 4vw, 2.35rem);
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .warp-hint {
+            display: inline-block;
+            font-size: 0.76rem;
+            color: #94a3b8;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 999px;
+            padding: 5px 14px;
+        }
+
+        /* SECTION */
+        .section {
+            background: rgba(11, 15, 42, 0.78);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 16px;
+            padding: 26px;
+            margin-bottom: 26px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        .section h2 {
+            font-size: 1.35rem;
+            color: #7dd3fc;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        /* TENTANG DIRI + KEAHLIAN APLIKASI */
+        .about-split {
+            display: grid;
+            grid-template-columns: 1.1fr 1.1fr;
+            gap: 22px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .about-left p {
+            color: #e2e8f0;
+            font-size: 0.94rem;
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .about-left p:last-child {
+            margin-bottom: 0;
+        }
+        .about-right {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.34);
+            border-radius: 14px;
+            padding: 14px;
+        }
+        .skills-heading {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #e9d5ff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            align-items: stretch;
+        }
+        .skill-badge {
+            width: 100%;
+            height: 92px;
+            background: #ffffff;
+            border: 2px solid rgba(56, 189, 248, 0.35);
+            border-radius: 12px;
+            padding: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .skill-badge:hover {
+            border-color: #38bdf8;
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+        }
+        .skill-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: 8px;
+            background: #ffffff;
+            filter: contrast(1.14) saturate(1.15);
+            image-rendering: -webkit-optimize-contrast;
+        }
+        .skill-logo-img.zoom-fit {
+            transform: scale(1.32);
+        }
+        .skill-icon-box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #0f172a;
+        }
+
+        .hint-text {
+            font-size: 0.86rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 12px;
+        }
+        .software-btn {
+            position: relative;
+            overflow: hidden;
+            background: rgba(30, 41, 59, 0.92);
+            color: #f8fafc;
+            border: 1px solid rgba(56, 189, 248, 0.42);
+            border-radius: 11px;
+            padding: 13px 15px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .software-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -110%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.45s ease;
+        }
+        .software-btn:hover::before {
+            left: 135%;
+        }
+        .software-btn:hover,
+        .software-btn.active {
+            background: linear-gradient(135deg, #0284c7, #7c3aed);
+            border-color: #7dd3fc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(56, 189, 248, 0.45), 0 0 12px rgba(168, 85, 247, 0.35);
+        }
+
+        /* PANEL PROYEK */
+        .project-display {
+            display: none;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(148, 163, 184, 0.22);
+            animation: fadeIn 0.25s ease;
+        }
+        .project-display.show {
+            display: block;
+        }
+        .project-display h3 {
+            font-size: 1.1rem;
+            color: #e9d5ff;
+            margin-bottom: 14px;
+        }
+        .project-item {
+            background: rgba(15, 23, 42, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+        .project-item > strong {
+            display: block;
+            color: #f8fafc;
+            font-size: 0.96rem;
+            margin-bottom: 4px;
+        }
+        .project-desc {
+            display: block;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        /* KARTU WOKWI */
+        .wokwi-card {
+            background: #111827;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        }
+        .wokwi-card-top {
+            background: #1e293b;
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            flex-wrap: wrap;
+        }
+        .wokwi-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #7dd3fc;
+        }
+        .wokwi-badges {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .wokwi-chip-tag {
+            font-size: 0.72rem;
+            background: rgba(168, 85, 247, 0.22);
+            color: #e9d5ff;
+            border: 1px solid rgba(192, 132, 252, 0.4);
+            padding: 2px 9px;
+            border-radius: 999px;
+        }
+        .wokwi-status-tag {
+            font-size: 0.72rem;
+            background: rgba(16, 185, 129, 0.18);
+            color: #6ee7b7;
+            border: 1px solid rgba(52, 211, 153, 0.45);
+            padding: 2px 9px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 8px #34d399;
+            display: inline-block;
+        }
+        .wokwi-card-body {
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 60%);
+        }
+        .wokwi-meta {
+            min-width: 210px;
+            flex: 1;
+        }
+        .wokwi-meta-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 3px;
+        }
+        .wokwi-meta-sub {
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+
+        /* KOTAK MINI GAME KECIL & PLAYABLE DI TEMPAT */
+        .mini-game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .mini-game-box {
+            background: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .mini-game-title {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #7dd3fc;
+            text-align: center;
+        }
+        .mini-game-sub {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .mini-game-canvas {
+            width: 196px;
+            height: 156px;
+            border-radius: 8px;
+            background: #030712;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            display: block;
+            touch-action: none;
+        }
+        .mini-game-hud {
+            width: 196px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: #e2e8f0;
+            font-family: monospace;
+        }
+        .mini-game-controls {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .mini-btn {
+            background: rgba(30, 41, 59, 0.95);
+            color: #f8fafc;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.22s ease;
+        }
+        .mini-btn:hover {
+            background: linear-gradient(135deg, #0284c7, #7c3aed);
+            border-color: #7dd3fc;
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
+        .sim-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #0284c7, #7c3aed);
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            white-space: nowrap;
+        }
+        .sim-btn:hover {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.8), 0 4px 14px rgba(168, 85, 247, 0.45);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* LIST & SERTIFIKAT */
+        .cert-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .cert-list > li {
+            margin-bottom: 12px;
+            padding-left: 18px;
+            position: relative;
+        }
+        .cert-list > li::before {
+            content: "•";
+            color: #38bdf8;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .cert-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+            margin-bottom: 18px;
+        }
+        .cert-card {
+            background: rgba(5, 8, 28, 0.88);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .cert-card:hover {
+            border-color: #a855f7;
+            box-shadow: 0 0 16px rgba(168, 85, 247, 0.45);
+            transform: translateY(-2px);
+        }
+        .cert-card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: contain;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .cert-card p {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* MODAL PREVIEW SERTIFIKAT */
+        .cert-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.92);
+            backdrop-filter: blur(6px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .cert-modal.open {
+            display: flex;
+        }
+        .cert-modal-box {
+            background: #0f172a;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 14px;
+            max-width: 780px;
+            width: 100%;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(139, 92, 246, 0.45);
+        }
+        .cert-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+        .cert-modal-title {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            font-weight: 600;
+            text-align: left;
+        }
+        .modal-back-btn {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            padding: 7px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.25s;
+        }
+        .modal-back-btn:hover {
+            filter: brightness(1.12);
+            transform: scale(1.03);
+        }
+        .cert-modal-box img {
+            max-width: 100%;
+            max-height: 72vh;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #030014;
+        }
+
+        /* POPUP INFO BENDA LANGIT */
+        .astro-popup {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            max-width: 315px;
+            background: rgba(11, 15, 42, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.55);
+            border-radius: 14px;
+            padding: 14px 16px;
+            z-index: 950;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 18px rgba(56, 189, 248, 0.25);
+            animation: fadeIn 0.25s ease;
+        }
+        .astro-popup.show {
+            display: block;
+        }
+        .astro-popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+        .astro-popup-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #7dd3fc;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .astro-popup-close {
+            background: rgba(51, 65, 85, 0.6);
+            color: #e2e8f0;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .astro-popup-close:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+        .astro-popup-desc {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        /* BACK TO TOP */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: 0.3s;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 0 22px rgba(56, 189, 248, 0.8);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(10, 10, 35, 0.78);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 15px;
+            margin-top: 35px;
+        }
+        .footer h3 {
+            margin-bottom: 20px;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .social-btn {
+            position: relative;
+            overflow: hidden;
+            background: rgba(30, 27, 75, 0.92);
+            color: #ffffff;
+            border: 1px solid rgba(56, 189, 248, 0.42);
+            padding: 12px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .social-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -115%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.45s ease;
+        }
+        .social-btn:hover::before {
+            left: 140%;
+        }
+        .social-btn:hover {
+            background: linear-gradient(135deg, #38bdf8, #a855f7);
+            border-color: #e0f2fe;
+            color: #ffffff;
+            box-shadow: 0 8px 22px rgba(56, 189, 248, 0.65), 0 0 14px rgba(168, 85, 247, 0.45);
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        @media (max-width: 760px) {
+            .about-split {
+                grid-template-columns: 1fr;
+            }
+            .about-left p {
+                text-align: left;
+            }
+        }
+        @media (max-width: 600px) {
+            .sector-hud {
+                top: auto;
+                bottom: 80px;
+                right: 16px;
+                padding: 5px 10px;
+            }
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="soundToggleBtn" class="sound-toggle-btn" onclick="toggleCosmicSound()" title="Aktifkan/Matikan Efek Suara Luar Angkasa">
+        <i id="soundIcon" class="fa-solid fa-volume-xmark"></i>
+        <span id="soundLabel">Suara: Mati</span>
+    </button>
+
+    <div class="sector-hud" id="sectorHud">
+        <div class="sector-hud-title"><i class="fa-solid fa-compass"></i> <span id="sectorName">SECTOR MW-01</span></div>
+        <div class="sector-hud-coords" id="sectorCoords">RA 17h 45m • DEC -29° 14'</div>
+    </div>
+
+    <canvas id="cosmos-canvas"></canvas>
+
+    <div class="container" id="top">
+        <div class="hero">
+            <img src="foto.jpg" alt="Foto Toba Elang Al Faruq">
+            <p><i class="fa-solid fa-star"></i> Personal Portfolio <i class="fa-solid fa-star"></i></p>
+            <h1>TOBA ELANG AL FARUQ</h1>
+            <span class="warp-hint"><i class="fa-solid fa-rocket"></i> Interaksi Langit: Klik planet/roket • Tahan klik di langit untuk Warp • Double-click untuk Black Hole!</span>
+        </div>
+
+        <div class="section">
+            <h2>Tentang Diri Saya</h2>
+            <div class="about-split">
+                <div class="about-left">
+                    <p>Halo, saya Toba Elang Al Faruq, pelajar SMAN 71 Jakarta yang memiliki ketertarikan besar pada pengembangan proyek mikrokontroler berbasis Arduino dan Wokwi, perancangan halaman web interaktif, serta eksplorasi seni visual.</p>
+                    <p>Dalam keseharian, saya gemar mengubah ide sederhana menjadi prototipe yang fungsional—mulai dari simulasi sensor jarak, sistem peringatan getaran, kendali iklim otomatis, hingga eksperimen antarmuka web dan karya lukis geometris.</p>
+                    <p>Bagi saya, proses mencoba, mengevaluasi, dan menyempurnakan sebuah karya adalah cara terbaik untuk terus berkembang, baik dalam kegiatan belajar di sekolah maupun dalam berbagai aktivitas organisasi.</p>
+                </div>
+                <div class="about-right">
+                    <div class="skills-heading"><i class="fa-solid fa-layer-group"></i> Keahlian Aplikasi</div>
+                    <div class="skills-grid">
+                        <div class="skill-badge">
+                            <img src="wokwi.webp" alt="Wokwi" class="skill-logo-img">
+                        </div>
+                        <div class="skill-badge">
+                            <img src="Arduino_Logo.svg.webp" alt="Arduino IDE" class="skill-logo-img">
+                        </div>
+                        <div class="skill-badge">
+                            <img src="tinkercad(1).jpg" alt="Tinkercad" class="skill-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none;">
+                                <i class="fa-solid fa-cube" style="color:#fb923c; font-size:44px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge">
+                            <img src="vs-code-logo.png" alt="VS Code" class="skill-logo-img zoom-fit" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none;">
+                                <i class="fa-solid fa-code" style="color:#38bdf8; font-size:44px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge">
+                            <img src="HTML5_logo_and_wordmark.svg.webp" alt="HTML5" class="skill-logo-img">
+                        </div>
+                        <div class="skill-badge">
+                            <img src="cs3.png" alt="CSS3" class="skill-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none; background:#1d4ed8;">
+                                <i class="fa-brands fa-css3-alt" style="color:#ffffff; font-size:46px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge" style="background:#f7df1e; border-color:#eab308;">
+                            <img src="JavaScript-Symbol.png" alt="JavaScript" class="skill-logo-img zoom-fit" style="background:#f7df1e;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none; background:#f7df1e;">
+                                <i class="fa-brands fa-js" style="color:#111827; font-size:48px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge">
+                            <img src="Adobe_Express_logo_RGB_1024px-1.webp" alt="Adobe Express" class="skill-logo-img">
+                        </div>
+                        <div class="skill-badge">
+                            <img src="Microsoft_Office_Word_(2019–2025).svg.webp" alt="Microsoft Word" class="skill-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none;">
+                                <i class="fa-solid fa-file-word" style="color:#3b82f6; font-size:44px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge">
+                            <img src="excel,jpg" alt="Microsoft Excel" class="skill-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none;">
+                                <i class="fa-solid fa-file-excel" style="color:#22c55e; font-size:44px;"></i>
+                            </div>
+                        </div>
+                        <div class="skill-badge">
+                            <img src="powerpoint.jpg" alt="Microsoft PowerPoint" class="skill-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="skill-icon-box" style="display:none;">
+                                <i class="fa-solid fa-file-powerpoint" style="color:#ef4444; font-size:44px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="hint-text"><i class="fa-solid fa-hand-pointer"></i> Klik salah satu tombol di bawah untuk melihat detail proyek &amp; mencoba simulasinya secara langsung:</p>
+
+            <div class="software-grid">
+                <button type="button" class="software-btn" onclick="tampilkanProyek('wokwi', this)">
+                    <i class="fa-solid fa-microchip"></i> Arduino IDE / Wokwi
+                </button>
+                <button type="button" class="software-btn" onclick="tampilkanProyek('tinkercad', this)">
+                    <i class="fa-solid fa-cube"></i> Tinkercad
+                </button>
+                <button type="button" class="software-btn" onclick="tampilkanProyek('vscode', this)">
+                    <i class="fa-solid fa-laptop-code"></i> VS Code / Web Dev
+                </button>
+                <button type="button" class="software-btn" onclick="tampilkanProyek('art', this)">
+                    <i class="fa-solid fa-paint-brush"></i> Visual Arts &amp; Design
+                </button>
+            </div>
+
+            <!-- PANEL 1: WOKWI -->
+            <div id="panel-wokwi" class="project-display">
+                <h3><i class="fa-solid fa-microchip"></i> Proyek Simulasi Arduino &amp; Wokwi</h3>
+
+                <div class="project-item">
+                    <strong>1. DIY Seismic / Earth Tremor Detector (Alarm Pendeteksi Getaran &amp; Gempa Sederhana) BY ELANG</strong>
+                    <span class="project-desc">Sistem peringatan dini gempa dan getaran berbasis Arduino Uno dengan indikator LED 3 tingkat (hijau, kuning, merah) serta dual buzzer alarm.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">Arduino Uno • ID #478699985573285889</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">DIY Seismic / Earth Tremor Detector BY ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/478699985573285889" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <strong>2. Smart Greenhouse Climate &amp; Automated Shading BY ELANG</strong>
+                    <span class="project-desc">Sistem kendali iklim otomatis pada greenhouse menggunakan sensor suhu, motor servo untuk peneduh otomatis, relay, dan buzzer.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">Arduino Uno • ID #476932950707698689</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">Smart Greenhouse Climate &amp; Automated Shading BY ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/476932950707698689" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <strong>3. Smart Agriculture by ELANG</strong>
+                    <span class="project-desc">Sistem otomatisasi pertanian pintar berbasis mikrokontroler untuk pemantauan dan pengendalian kondisi lingkungan tanaman secara otomatis.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">Arduino Uno • ID #476778264026484737</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">Smart Agriculture by ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/476778264026484737" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <strong>4. ROBOT PINTAR MOCHI BY ELANG</strong>
+                    <span class="project-desc">Robot interaktif ekspresif menggunakan layar OLED SSD1306, motor servo, sensor ultrasonik, sensor suhu, dan tombol kontrol.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">OLED + Servo + Sensor • ID #474971448556788737</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">ROBOT PINTAR MOCHI BY ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/474971448556788737" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <strong>5. LAYAR OLED OLEH ELANG</strong>
+                    <span class="project-desc">Eksperimen tampilan grafis dan informasi dinamis pada layar OLED berbasis mikrokontroler sebagai antarmuka visual proyek.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">OLED Display • ID #474770661406683137</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">LAYAR OLED OLEH ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/474770661406683137" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <strong>6. Sensor Jarak BY ELANG</strong>
+                    <span class="project-desc">Sensor jarak jauh menggunakan sensor ultrasonik HC-SR04, tampilan jarak real-time, LED indikator, dan buzzer.</span>
+                    <div class="wokwi-card">
+                        <div class="wokwi-card-top">
+                            <span class="wokwi-brand"><i class="fa-solid fa-circuit-board"></i> Wokwi Project Preview</span>
+                            <div class="wokwi-badges">
+                                <span class="wokwi-status-tag"><span class="status-dot"></span> Simulasi Siap Dijalankan</span>
+                                <span class="wokwi-chip-tag">Ultrasonic HC-SR04 • ID #474705209190366209</span>
+                            </div>
+                        </div>
+                        <div class="wokwi-card-body">
+                            <div class="wokwi-meta">
+                                <div class="wokwi-meta-title">Sensor Jarak BY ELANG</div>
+                                <div class="wokwi-meta-sub">Simulasi interaktif langsung di browser via Wokwi</div>
+                            </div>
+                            <a href="https://wokwi.com/projects/474705209190366209" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                                <i class="fa-solid fa-play"></i> Coba Simulasi di Wokwi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 2: TINKERCAD -->
+            <div id="panel-tinkercad" class="project-display">
+                <h3><i class="fa-solid fa-cube"></i> Proyek Rangkaian &amp; 3D Tinkercad</h3>
+                <div class="project-item">
+                    <strong>1. Prototyping Rangkaian Sensor &amp; Aktuator Arduino</strong>
+                    <span class="project-desc">Pengujian jalur kelistrikan (wiring), resistor, relay, dan kalibrasi komponen dasar sebelum implementasi kode mikrokontroler.</span>
+                    <a href="https://www.tinkercad.com/" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                        <i class="fa-solid fa-play"></i> Buka Simulasi Tinkercad
+                    </a>
+                </div>
+                <div class="project-item">
+                    <strong>2. Simulasi Kontrol Motor Servo &amp; Indikator LED</strong>
+                    <span class="project-desc">Perancangan logika pergerakan mekanik servo dan sistem sinyal lampu peringatan berbasis logika pemrograman C++.</span>
+                    <a href="https://www.tinkercad.com/" target="_blank" rel="noopener noreferrer" class="sim-btn">
+                        <i class="fa-solid fa-play"></i> Buka Simulasi Tinkercad
+                    </a>
+                </div>
+            </div>
+
+            <!-- PANEL 3: VS CODE / WEB DEV -->
+            <div id="panel-vscode" class="project-display">
+                <h3><i class="fa-solid fa-laptop-code"></i> Proyek Game Web Interaktif (HTML5 / CSS3 / JS)</h3>
+                <p class="hint-text">Mainkan langsung di kotak kecil di bawah ini tanpa pindah halaman:</p>
+
+                <div class="mini-game-grid">
+                    <!-- GAME 1: STARFIGHTER BLASTER -->
+                    <div class="mini-game-box">
+                        <div class="mini-game-title">Starfighter Blaster</div>
+                        <div class="mini-game-sub">Klik di kotak untuk tembak meteor</div>
+                        <canvas id="gameCanvas1" class="mini-game-canvas" width="196" height="156"></canvas>
+                        <div class="mini-game-hud">
+                            <span>SKOR: <strong id="score1">0</strong></span>
+                            <span id="status1">MAIN</span>
+                        </div>
+                        <div class="mini-game-controls">
+                            <button type="button" class="mini-btn" onclick="moveShooter1(-18)">◄ Kiri</button>
+                            <button type="button" class="mini-btn" onclick="shootLaser1()">Tembak</button>
+                            <button type="button" class="mini-btn" onclick="moveShooter1(18)">Kanan ►</button>
+                            <button type="button" class="mini-btn" onclick="resetGame1()">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- GAME 2: NEON SNAKE GALAXY -->
+                    <div class="mini-game-box">
+                        <div class="mini-game-title">Neon Snake Galaxy</div>
+                        <div class="mini-game-sub">Arahkan ular ke bintang energi</div>
+                        <canvas id="gameCanvas2" class="mini-game-canvas" width="196" height="156"></canvas>
+                        <div class="mini-game-hud">
+                            <span>SKOR: <strong id="score2">0</strong></span>
+                            <span id="status2">MAIN</span>
+                        </div>
+                        <div class="mini-game-controls">
+                            <button type="button" class="mini-btn" onclick="setSnakeDir(0,-1)">▲</button>
+                            <button type="button" class="mini-btn" onclick="setSnakeDir(-1,0)">◄</button>
+                            <button type="button" class="mini-btn" onclick="setSnakeDir(0,1)">▼</button>
+                            <button type="button" class="mini-btn" onclick="setSnakeDir(1,0)">►</button>
+                            <button type="button" class="mini-btn" onclick="resetGame2()">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- GAME 3: ASTRO BRICK BREAKER -->
+                    <div class="mini-game-box">
+                        <div class="mini-game-title">Astro Brick Breaker</div>
+                        <div class="mini-game-sub">Pantulkan bola ke balok kristal</div>
+                        <canvas id="gameCanvas3" class="mini-game-canvas" width="196" height="156"></canvas>
+                        <div class="mini-game-hud">
+                            <span>SKOR: <strong id="score3">0</strong></span>
+                            <span id="status3">MAIN</span>
+                        </div>
+                        <div class="mini-game-controls">
+                            <button type="button" class="mini-btn" onclick="movePaddle3(-22)">◄ Kiri</button>
+                            <button type="button" class="mini-btn" onclick="movePaddle3(22)">Kanan ►</button>
+                            <button type="button" class="mini-btn" onclick="resetGame3()">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- GAME 4: ORBIT GRAVITY & SHIELD -->
+                    <div class="mini-game-box">
+                        <div class="mini-game-title">Orbit Gravity &amp; Shield</div>
+                        <div class="mini-game-sub">Putar orbit &amp; tangkap inti biru</div>
+                        <canvas id="gameCanvas4" class="mini-game-canvas" width="196" height="156"></canvas>
+                        <div class="mini-game-hud">
+                            <span>SKOR: <strong id="score4">0</strong></span>
+                            <span id="status4">MAIN</span>
+                        </div>
+                        <div class="mini-game-controls">
+                            <button type="button" class="mini-btn" onclick="rotateOrbit4(-0.45)">◄ Putar</button>
+                            <button type="button" class="mini-btn" onclick="rotateOrbit4(0.45)">Putar ►</button>
+                            <button type="button" class="mini-btn" onclick="resetGame4()">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- GAME 5: COSMIC SIMON SEQUENCE -->
+                    <div class="mini-game-box">
+                        <div class="mini-game-title">Cosmic Simon Sequence</div>
+                        <div class="mini-game-sub">Ikuti urutan nyala 4 pad warna</div>
+                        <canvas id="gameCanvas5" class="mini-game-canvas" width="196" height="156"></canvas>
+                        <div class="mini-game-hud">
+                            <span>RONDE: <strong id="score5">1</strong></span>
+                            <span id="status5">LIHAT</span>
+                        </div>
+                        <div class="mini-game-controls">
+                            <button type="button" class="mini-btn" onclick="simonPress(0)" style="border-color:#38bdf8;">Biru</button>
+                            <button type="button" class="mini-btn" onclick="simonPress(1)" style="border-color:#c084fc;">Ungu</button>
+                            <button type="button" class="mini-btn" onclick="simonPress(2)" style="border-color:#34d399;">Hijau</button>
+                            <button type="button" class="mini-btn" onclick="simonPress(3)" style="border-color:#f472b6;">Pink</button>
+                            <button type="button" class="mini-btn" onclick="resetGame5()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 4: VISUAL ARTS -->
+            <div id="panel-art" class="project-display">
+                <h3><i class="fa-solid fa-paint-brush"></i> Karya Seni Visual &amp; Desain Grafis</h3>
+                <div class="project-item">
+                    <strong>1. Lukisan Pop-Art Geometris "Mobil Biasa"</strong>
+                    <span class="project-desc">Karya lukis kanvas ukuran 39,5 cm x 29,5 cm dengan pendekatan komposisi warna geometris bertema otomotif.</span>
+                </div>
+                <div class="project-item">
+                    <strong>2. Desain Slide Presentasi &amp; Proposal Organisasi</strong>
+                    <span class="project-desc">Perancangan materi visual presentasi sekolah dan proposal program kerja organisasi menggunakan Adobe Express dan aplikasi desain.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Organisasi &amp; Pencapaian</h2>
+            <p><strong>Organisasi &amp; Kepramukaan:</strong> Aktif dalam kegiatan kepramukaan melalui <strong>Saka Dirgantara</strong> dan mengemban amanah sebagai <strong>Kerani Putra</strong>. Berperan langsung dalam kepanitiaan <strong>Perjusa</strong> pada tahun <strong>2025 dan 2026</strong>, yang keduanya dijalani di <strong>Divisi Perlengkapan</strong> untuk memastikan kesiapan logistik kegiatan. Selain itu, pernah mengikuti seleksi pendaftaran OSIS pada tahun <strong>2025</strong> dan kembali mencoba pada tahun <strong>2026</strong>; meski belum terpilih menjadi pengurus OSIS, kedua proses tersebut menjadi pengalaman berharga dalam melatih mental dan ketekunan.</p>
+            <p style="margin-top: 10px;"><strong>Pencapaian &amp; Proyek Eksplorasi:</strong> Menyusun proposal penelitian kuantitatif tempat sampah pemilah otomatis berbasis Arduino, mengikuti workshop dan tes <strong>Google Ads</strong> untuk memperluas pemahaman tentang periklanan digital, serta membangun berbagai simulasi mikrokontroler seperti detektor getaran/gempa, smart greenhouse, smart agriculture, robot Mochi, tampilan OLED, dan sensor jarak.</p>
+        </div>
+
+        <div class="section">
+            <h2>Sertifikat &amp; Pelatihan</h2>
+            <ul class="cert-list">
+                <li>
+                    <strong>Partisipasi – Workshop Ide Bisnis &amp; Kewirausahaan (NYBPC GBECC 2026):</strong> Mengikuti sesi pembekalan perancangan ide dan model bisnis.
+                </li>
+                <li>
+                    <strong>Sertifikat Partisipasi – Webinar Personal Finance &amp; Jaringan Alumni (Zurich Entrepreneurship Program):</strong> Mengikuti pemaparan pengelolaan keuangan pribadi dan diskusi kewirausahaan.
+                    <div class="cert-gallery">
+                        <div class="cert-card">
+                            <img src="sertifikat1.jpg" alt="Sertifikat 1" onclick="bukaModalSertifikat('sertifikat1.jpg', 'Sertifikat 1')">
+                            <p>Sertifikat 1 (Klik untuk memperbesar)</p>
+                        </div>
+                        <div class="cert-card">
+                            <img src="sertifikat2.jpg" alt="Sertifikat 2" onclick="bukaModalSertifikat('sertifikat2.jpg', 'Sertifikat 2')">
+                            <p>Sertifikat 2 (Klik untuk memperbesar)</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <strong>Workshop &amp; Tes Google Ads:</strong> Mengikuti materi pelatihan dan pengujian pemahaman dasar periklanan digital di ekosistem Google.
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <h3>Hubungi Saya</h3>
+            <div class="social-links">
+                <a href="https://wa.me/628xxxxxxxxxx" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://www.tiktok.com/@username_kamu" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <i class="fa-brands fa-tiktok"></i> TikTok
+                </a>
+                <a href="https://instagram.com/username_kamu" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <i class="fa-brands fa-instagram"></i> Instagram
+                </a>
+                <a href="https://linkedin.com/in/username_kamu" target="_blank" rel="noopener noreferrer" class="social-btn">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="astroPopup" class="astro-popup">
+        <div class="astro-popup-header">
+            <span id="astroPopupTitle" class="astro-popup-title"><i class="fa-solid fa-satellite-dish"></i> Planet</span>
+            <button type="button" class="astro-popup-close" onclick="tutupAstroPopup()" aria-label="Tutup">×</button>
+        </div>
+        <p id="astroPopupDesc" class="astro-popup-desc"></p>
+    </div>
+
+    <button id="backToTopBtn" class="back-to-top" onclick="scrollKeAtas()" title="Kembali ke Atas" aria-label="Kembali ke Atas">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <div id="certModal" class="cert-modal" onclick="tutupModalJikaLatar(event)">
+        <div class="cert-modal-box">
+            <div class="cert-modal-header">
+                <span id="certModalTitle" class="cert-modal-title">Preview Sertifikat</span>
+                <button type="button" class="modal-back-btn" onclick="tutupModalSertifikat()">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+            <img id="certModalImg" src="" alt="Preview Sertifikat">
+        </div>
+    </div>
+
+    <script>
+        function roundRectPath(ctx, x, y, w, h, r) {
+            const radius = Math.min(r, w / 2, h / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.arcTo(x + w, y, x + w, y + h, radius);
+            ctx.arcTo(x + w, y + h, x, y + h, radius);
+            ctx.arcTo(x, y + h, x, y, radius);
+            ctx.arcTo(x, y, x + w, y, radius);
+            ctx.closePath();
+        }
+
+        let soundEnabled = false;
+        let audioCtx = null;
+
+        function ensureAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+            }
+        }
+
+        function playCosmicBlip(freqStart = 520, freqEnd = 880, duration = 0.14) {
+            if (!soundEnabled) return;
+            ensureAudioContext();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freqStart, now);
+            osc.frequency.exponentialRampToValueAtTime(freqEnd, now + duration);
+
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + duration);
+        }
+
+        function toggleCosmicSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggleBtn');
+            const icon = document.getElementById('soundIcon');
+            const label = document.getElementById('soundLabel');
+
+            if (soundEnabled) {
+                ensureAudioContext();
+                btn.classList.add('active');
+                icon.className = 'fa-solid fa-volume-high';
+                label.textContent = 'Suara: Aktif';
+                playCosmicBlip(440, 740, 0.18);
+            } else {
+                btn.classList.remove('active');
+                icon.className = 'fa-solid fa-volume-xmark';
+                label.textContent = 'Suara: Mati';
+            }
+        }
+
+        function tampilkanProyek(kategori, tombolDiklik) {
+            const panelTarget = document.getElementById('panel-' + kategori);
+            if (!panelTarget) return;
+            const sudahTerbuka = panelTarget.classList.contains('show');
+
+            document.querySelectorAll('.project-display').forEach(panel => {
+                panel.classList.remove('show');
+            });
+            document.querySelectorAll('.software-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            if (!sudahTerbuka) {
+                panelTarget.classList.add('show');
+                if (tombolDiklik) tombolDiklik.classList.add('active');
+                playCosmicBlip(380, 640, 0.12);
+                if (kategori === 'vscode') {
+                    startSimonRound();
+                }
+            }
+        }
+
+        /* ================= 5 MINI GAME PLAYABLE DI TEMPAT ================= */
+        const g1Canvas = document.getElementById('gameCanvas1');
+        const g1Ctx = g1Canvas ? g1Canvas.getContext('2d') : null;
+        let g1State;
+        function resetGame1() {
+            g1State = {
+                shipX: 98,
+                bullets: [],
+                enemies: [
+                    { x: 35, y: 18, r: 9 },
+                    { x: 98, y: 12, r: 9 },
+                    { x: 160, y: 22, r: 9 }
+                ],
+                score: 0,
+                over: false
+            };
+            document.getElementById('score1').textContent = '0';
+            document.getElementById('status1').textContent = 'MAIN';
+        }
+        function moveShooter1(dx) {
+            if (!g1State || g1State.over) return;
+            g1State.shipX = Math.max(18, Math.min(178, g1State.shipX + dx));
+        }
+        function shootLaser1() {
+            if (!g1State || g1State.over) return;
+            g1State.bullets.push({ x: g1State.shipX, y: 128 });
+            playCosmicBlip(720, 980, 0.07);
+        }
+        if (g1Canvas) {
+            g1Canvas.addEventListener('click', (e) => {
+                const rect = g1Canvas.getBoundingClientRect();
+                const clickX = ((e.clientX - rect.left) / rect.width) * 196;
+                g1State.shipX = Math.max(18, Math.min(178, clickX));
+                shootLaser1();
+            });
+        }
+        resetGame1();
+
+        const g2Canvas = document.getElementById('gameCanvas2');
+        const g2Ctx = g2Canvas ? g2Canvas.getContext('2d') : null;
+        const gridSize2 = 14;
+        let g2State, g2Tick = 0;
+        function spawnFood2() {
+            const cols = Math.floor(196 / gridSize2);
+            const rows = Math.floor(154 / gridSize2);
+            return {
+                x: Math.floor(Math.random() * cols),
+                y: Math.floor(Math.random() * rows)
+            };
+        }
+        function resetGame2() {
+            g2State = {
+                snake: [{ x: 6, y: 5 }, { x: 5, y: 5 }, { x: 4, y: 5 }],
+                dir: { x: 1, y: 0 },
+                food: spawnFood2(),
+                score: 0,
+                over: false
+            };
+            document.getElementById('score2').textContent = '0';
+            document.getElementById('status2').textContent = 'MAIN';
+        }
+        function setSnakeDir(x, y) {
+            if (!g2State || g2State.over) return;
+            if (g2State.dir.x + x === 0 && g2State.dir.y + y === 0) return;
+            g2State.dir = { x, y };
+        }
+        resetGame2();
+
+        const g3Canvas = document.getElementById('gameCanvas3');
+        const g3Ctx = g3Canvas ? g3Canvas.getContext('2d') : null;
+        let g3State;
+        function resetGame3() {
+            const bricks = [];
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 6; c++) {
+                    bricks.push({ x: 10 + c * 30, y: 12 + r * 14, w: 26, h: 9, alive: true });
+                }
+            }
+            g3State = {
+                paddleX: 74,
+                ballX: 98,
+                ballY: 115,
+                vx: 1.6,
+                vy: -1.8,
+                bricks,
+                score: 0,
+                over: false
+            };
+            document.getElementById('score3').textContent = '0';
+            document.getElementById('status3').textContent = 'MAIN';
+        }
+        function movePaddle3(dx) {
+            if (!g3State) return;
+            g3State.paddleX = Math.max(4, Math.min(144, g3State.paddleX + dx));
+        }
+        resetGame3();
+
+        const g4Canvas = document.getElementById('gameCanvas4');
+        const g4Ctx = g4Canvas ? g4Canvas.getContext('2d') : null;
+        let g4State;
+        function resetGame4() {
+            g4State = {
+                angle: 0,
+                orbAngle: Math.PI,
+                orbDist: 68,
+                score: 0,
+                over: false
+            };
+            document.getElementById('score4').textContent = '0';
+            document.getElementById('status4').textContent = 'MAIN';
+        }
+        function rotateOrbit4(da) {
+            if (!g4State || g4State.over) return;
+            g4State.angle += da;
+        }
+        resetGame4();
+
+        const g5Canvas = document.getElementById('gameCanvas5');
+        const g5Ctx = g5Canvas ? g5Canvas.getContext('2d') : null;
+        const simonPads = [
+            { x: 20, y: 16, w: 72, h: 56, base: '#0284c7', active: '#7dd3fc' },
+            { x: 104, y: 16, w: 72, h: 56, base: '#7e22ce', active: '#e9d5ff' },
+            { x: 20, y: 84, w: 72, h: 56, base: '#047857', active: '#6ee7b7' },
+            { x: 104, y: 84, w: 72, h: 56, base: '#be185d', active: '#f9a8d4' }
+        ];
+        let g5State = { seq: [], playerIdx: 0, activePad: -1, showing: false, round: 1 };
+        function startSimonRound() {
+            g5State.seq.push(Math.floor(Math.random() * 4));
+            g5State.playerIdx = 0;
+            g5State.showing = true;
+            document.getElementById('score5').textContent = String(g5State.round);
+            document.getElementById('status5').textContent = 'LIHAT';
+
+            g5State.seq.forEach((padId, idx) => {
+                setTimeout(() => {
+                    g5State.activePad = padId;
+                    playCosmicBlip(320 + padId * 110, 440 + padId * 110, 0.14);
+                    setTimeout(() => {
+                        g5State.activePad = -1;
+                        if (idx === g5State.seq.length - 1) {
+                            g5State.showing = false;
+                            document.getElementById('status5').textContent = 'GILIRANMU';
+                        }
+                    }, 320);
+                }, idx * 520 + 200);
+            });
+        }
+        function resetGame5() {
+            g5State = { seq: [], playerIdx: 0, activePad: -1, showing: false, round: 1 };
+            startSimonRound();
+        }
+        function simonPress(padId) {
+            if (g5State.showing) return;
+            g5State.activePad = padId;
+            playCosmicBlip(320 + padId * 110, 440 + padId * 110, 0.12);
+            setTimeout(() => { g5State.activePad = -1; }, 180);
+
+            if (g5State.seq[g5State.playerIdx] === padId) {
+                g5State.playerIdx++;
+                if (g5State.playerIdx >= g5State.seq.length) {
+                    g5State.round++;
+                    setTimeout(startSimonRound, 450);
+                }
+            } else {
+                document.getElementById('status5').textContent = 'SALAH! RESET';
+                setTimeout(resetGame5, 700);
+            }
+        }
+        if (g5Canvas) {
+            g5Canvas.addEventListener('click', (e) => {
+                const rect = g5Canvas.getBoundingClientRect();
+                const mx = ((e.clientX - rect.left) / rect.width) * 196;
+                const my = ((e.clientY - rect.top) / rect.height) * 156;
+                simonPads.forEach((p, idx) => {
+                    if (mx >= p.x && mx <= p.x + p.w && my >= p.y && my <= p.y + p.h) {
+                        simonPress(idx);
+                    }
+                });
+            });
+        }
+
+        function stepMiniGames() {
+            if (g1Ctx && g1State) {
+                g1Ctx.clearRect(0, 0, 196, 156);
+                g1Ctx.fillStyle = '#030712';
+                g1Ctx.fillRect(0, 0, 196, 156);
+
+                if (!g1State.over) {
+                    g1State.bullets.forEach(b => { b.y -= 4.2; });
+                    g1State.bullets = g1State.bullets.filter(b => b.y > 0);
+
+                    g1State.enemies.forEach(en => {
+                        en.y += 0.45;
+                        if (en.y + en.r >= 134) {
+                            g1State.over = true;
+                            document.getElementById('status1').textContent = 'KALAH';
+                        }
+                        g1State.bullets.forEach((b, bIdx) => {
+                            if (Math.hypot(b.x - en.x, b.y - en.y) < en.r + 4) {
+                                g1State.bullets.splice(bIdx, 1);
+                                en.y = 10;
+                                en.x = 22 + Math.random() * 150;
+                                g1State.score += 10;
+                                document.getElementById('score1').textContent = String(g1State.score);
+                            }
+                        });
+                    });
+                }
+
+                g1Ctx.fillStyle = '#38bdf8';
+                g1Ctx.beginPath();
+                g1Ctx.moveTo(g1State.shipX, 130);
+                g1Ctx.lineTo(g1State.shipX - 10, 146);
+                g1Ctx.lineTo(g1State.shipX + 10, 146);
+                g1Ctx.closePath();
+                g1Ctx.fill();
+
+                g1Ctx.fillStyle = '#facc15';
+                g1State.bullets.forEach(b => g1Ctx.fillRect(b.x - 1.5, b.y - 6, 3, 7));
+
+                g1Ctx.fillStyle = '#f472b6';
+                g1State.enemies.forEach(en => {
+                    g1Ctx.beginPath();
+                    g1Ctx.arc(en.x, en.y, en.r, 0, Math.PI * 2);
+                    g1Ctx.fill();
+                });
+            }
+
+            if (g2Ctx && g2State) {
+                g2Tick++;
+                if (!g2State.over && g2Tick % 12 === 0) {
+                    const head = {
+                        x: g2State.snake[0].x + g2State.dir.x,
+                        y: g2State.snake[0].y + g2State.dir.y
+                    };
+                    const cols = Math.floor(196 / gridSize2);
+                    const rows = Math.floor(154 / gridSize2);
+                    const hitSelf = g2State.snake.some(seg => seg.x === head.x && seg.y === head.y);
+
+                    if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows || hitSelf) {
+                        g2State.over = true;
+                        document.getElementById('status2').textContent = 'TABRAK';
+                    } else {
+                        g2State.snake.unshift(head);
+                        if (head.x === g2State.food.x && head.y === g2State.food.y) {
+                            g2State.score += 10;
+                            document.getElementById('score2').textContent = String(g2State.score);
+                            g2State.food = spawnFood2();
+                        } else {
+                            g2State.snake.pop();
+                        }
+                    }
+                }
+
+                g2Ctx.fillStyle = '#030712';
+                g2Ctx.fillRect(0, 0, 196, 156);
+
+                g2Ctx.fillStyle = '#f472b6';
+                g2Ctx.beginPath();
+                g2Ctx.arc(g2State.food.x * gridSize2 + 7, g2State.food.y * gridSize2 + 7, 5, 0, Math.PI * 2);
+                g2Ctx.fill();
+
+                g2State.snake.forEach((seg, idx) => {
+                    g2Ctx.fillStyle = idx === 0 ? '#6ee7b7' : '#10b981';
+                    g2Ctx.fillRect(seg.x * gridSize2 + 1, seg.y * gridSize2 + 1, gridSize2 - 2, gridSize2 - 2);
+                });
+            }
+
+            if (g3Ctx && g3State) {
+                if (!g3State.over) {
+                    g3State.ballX += g3State.vx;
+                    g3State.ballY += g3State.vy;
+
+                    if (g3State.ballX < 5 || g3State.ballX > 191) g3State.vx = -g3State.vx;
+                    if (g3State.ballY < 5) g3State.vy = -g3State.vy;
+
+                    if (g3State.ballY >= 134 && g3State.ballY <= 142 &&
+                        g3State.ballX >= g3State.paddleX && g3State.ballX <= g3State.paddleX + 48) {
+                        g3State.vy = -Math.abs(g3State.vy);
+                    }
+
+                    if (g3State.ballY > 154) {
+                        g3State.over = true;
+                        document.getElementById('status3').textContent = 'JATUH';
+                    }
+
+                    g3State.bricks.forEach(br => {
+                        if (br.alive &&
+                            g3State.ballX + 4 >= br.x && g3State.ballX - 4 <= br.x + br.w &&
+                            g3State.ballY + 4 >= br.y && g3State.ballY - 4 <= br.y + br.h) {
+                            br.alive = false;
+                            g3State.vy = -g3State.vy;
+                            g3State.score += 10;
+                            document.getElementById('score3').textContent = String(g3State.score);
+                        }
+                    });
+                }
+
+                g3Ctx.fillStyle = '#030712';
+                g3Ctx.fillRect(0, 0, 196, 156);
+
+                g3State.bricks.forEach(br => {
+                    if (br.alive) {
+                        g3Ctx.fillStyle = '#818cf8';
+                        g3Ctx.fillRect(br.x, br.y, br.w, br.h);
+                    }
+                });
+
+                g3Ctx.fillStyle = '#38bdf8';
+                g3Ctx.fillRect(g3State.paddleX, 138, 48, 6);
+
+                g3Ctx.fillStyle = '#ffffff';
+                g3Ctx.beginPath();
+                g3Ctx.arc(g3State.ballX, g3State.ballY, 4.5, 0, Math.PI * 2);
+                g3Ctx.fill();
+            }
+
+            if (g4Ctx && g4State) {
+                const cx = 98, cy = 78;
+                if (!g4State.over) {
+                    g4State.orbDist -= 0.35;
+                    const sx = cx + Math.cos(g4State.angle) * 28;
+                    const sy = cy + Math.sin(g4State.angle) * 28;
+                    const ox = cx + Math.cos(g4State.orbAngle) * g4State.orbDist;
+                    const oy = cy + Math.sin(g4State.orbAngle) * g4State.orbDist;
+
+                    if (Math.hypot(sx - ox, sy - oy) < 12) {
+                        g4State.score += 10;
+                        document.getElementById('score4').textContent = String(g4State.score);
+                        g4State.orbDist = 68;
+                        g4State.orbAngle = Math.random() * Math.PI * 2;
+                    } else if (g4State.orbDist < 14) {
+                        g4State.over = true;
+                        document.getElementById('status4').textContent = 'KENA INTI';
+                    }
+                }
+
+                g4Ctx.fillStyle = '#030712';
+                g4Ctx.fillRect(0, 0, 196, 156);
+
+                g4Ctx.strokeStyle = 'rgba(192,132,252,0.35)';
+                g4Ctx.beginPath();
+                g4Ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+                g4Ctx.stroke();
+
+                g4Ctx.fillStyle = '#fbbf24';
+                g4Ctx.beginPath();
+                g4Ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+                g4Ctx.fill();
+
+                const sx = cx + Math.cos(g4State.angle) * 28;
+                const sy = cy + Math.sin(g4State.angle) * 28;
+                g4Ctx.fillStyle = '#38bdf8';
+                g4Ctx.beginPath();
+                g4Ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+                g4Ctx.fill();
+
+                const ox = cx + Math.cos(g4State.orbAngle) * g4State.orbDist;
+                const oy = cy + Math.sin(g4State.orbAngle) * g4State.orbDist;
+                g4Ctx.fillStyle = '#6ee7b7';
+                g4Ctx.beginPath();
+                g4Ctx.arc(ox, oy, 5.5, 0, Math.PI * 2);
+                g4Ctx.fill();
+            }
+
+            if (g5Ctx) {
+                g5Ctx.fillStyle = '#030712';
+                g5Ctx.fillRect(0, 0, 196, 156);
+                simonPads.forEach((p, idx) => {
+                    g5Ctx.fillStyle = (g5State.activePad === idx) ? p.active : p.base;
+                    g5Ctx.fillRect(p.x, p.y, p.w, p.h);
+                });
+            }
+        }
+        setInterval(stepMiniGames, 45);
+
+        function bukaModalSertifikat(src, judul) {
+            document.getElementById('certModalImg').src = src;
+            document.getElementById('certModalTitle').textContent = judul;
+            document.getElementById('certModal').classList.add('open');
+        }
+
+        function tutupModalSertifikat() {
+            document.getElementById('certModal').classList.remove('open');
+            document.getElementById('certModalImg').src = '';
+        }
+
+        function tutupModalJikaLatar(event) {
+            if (event.target.id === 'certModal') {
+                tutupModalSertifikat();
+            }
+        }
+
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        const sectorNameEl = document.getElementById('sectorName');
+        const sectorCoordsEl = document.getElementById('sectorCoords');
+        const pointer = { x: -9999, y: -9999, active: false };
+
+        function updateSectorHud(mouseX = 0, mouseY = 0) {
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const scrollPct = Math.min(99, Math.max(1, Math.round(((window.scrollY || 0) / maxScroll) * 99)));
+            const raH = String(Math.floor((mouseX / Math.max(1, window.innerWidth)) * 23)).padStart(2, '0');
+            const raM = String(Math.floor(((mouseX * 7) % 60))).padStart(2, '0');
+            const decD = Math.floor(((mouseY / Math.max(1, window.innerHeight)) - 0.5) * 180);
+            const decSign = decD >= 0 ? '+' : '-';
+            const decAbs = String(Math.abs(decD)).padStart(2, '0');
+
+            sectorNameEl.textContent = `SECTOR MW-${String(scrollPct).padStart(2, '0')}`;
+            sectorCoordsEl.textContent = `RA ${raH}h ${raM}m • DEC ${decSign}${decAbs}° 14'`;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 280) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+            updateSectorHud(pointer.active ? pointer.x : window.innerWidth / 2, pointer.active ? pointer.y : window.innerHeight / 2);
+        });
+
+        function scrollKeAtas() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            playCosmicBlip(480, 820, 0.14);
+        }
+
+        const astroFacts = {
+            'Bumi': 'Planet ketiga dari Matahari dengan 71% permukaan tertutup lautan air dan atmosfer kaya oksigen yang menopang kehidupan.',
+            'Bulan': 'Satelit alami tunggal Bumi berjarak rata-rata 384.400 km dengan permukaan penuh kawah tumbukan asteroid.',
+            'Saturnus': 'Planet raksasa gas terbesar kedua di Tata Surya yang terkenal dengan sistem cincin es dan batuannya yang lebar.',
+            'Mars': 'Dijuluki Planet Merah karena kandungan besi oksida di permukaannya; memiliki gunung tertinggi di Tata Surya, Olympus Mons.',
+            'Satelit #1': 'Satelit orbit rendah (LEO) yang bertugas memantau cuaca dan komunikasi data secara real-time.',
+            'Satelit #2': 'Satelit navigasi & telekomunikasi yang membantu pemetaan posisi dan pengiriman sinyal lintas benua.',
+            'Satelit #3': 'Satelit observasi luar angkasa yang mengumpulkan data atmosfer dan citra permukaan planet.',
+            'Pesawat Ulang-Alik': 'Wahana eksplorasi orbital bermesin ion yang melintas di sektor luar angkasa.'
+        };
+
+        const astroPopup = document.getElementById('astroPopup');
+        const astroPopupTitle = document.getElementById('astroPopupTitle');
+        const astroPopupDesc = document.getElementById('astroPopupDesc');
+
+        function bukaAstroPopup(nama, warna) {
+            astroPopupTitle.innerHTML = `<i class="fa-solid fa-satellite-dish"></i> ${nama}`;
+            astroPopupTitle.style.color = warna || '#7dd3fc';
+            astroPopup.style.borderColor = warna || 'rgba(56, 189, 248, 0.55)';
+            astroPopupDesc.textContent = astroFacts[nama] || 'Objek astronomi di ruang angkasa.';
+            astroPopup.classList.add('show');
+            playCosmicBlip(560, 960, 0.16);
+        }
+
+        function tutupAstroPopup() {
+            astroPopup.classList.remove('show');
+        }
+
+        const canvas = document.getElementById('cosmos-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height, centerX, centerY;
+        const backgroundStars = [];
+        const galaxyParticles = [];
+        const galaxyDustClouds = [];
+        const meteors = [];
+        const comets = [];
+        const sparkles = [];
+        const blackHoles = [];
+        const celestialHitboxes = [];
+        const parallax = { targetX: 0, targetY: 0, currentX: 0, currentY: 0 };
+
+        let isWarping = false;
+        let warpFactor = 0;
+
+        function isInteractiveUIElement(target) {
+            return target && target.closest('button, a, img, .section, .hero, .footer, .astro-popup, .cert-modal');
+        }
+
+        const sparkleColors = ['#38bdf8', '#c084fc', '#f472b6', '#ffffff', '#6ee7b7'];
+        function spawnSparkles(x, y, count = 2) {
+            for (let i = 0; i < count; i++) {
+                sparkles.push({
+                    x: x + (Math.random() - 0.5) * 8,
+                    y: y + (Math.random() - 0.5) * 8,
+                    vx: (Math.random() - 0.5) * 1.4,
+                    vy: (Math.random() - 0.5) * 1.4 - 0.25,
+                    size: Math.random() * 2.4 + 1.1,
+                    alpha: 0.95,
+                    color: sparkleColors[Math.floor(Math.random() * sparkleColors.length)]
+                });
+            }
+            if (sparkles.length > 140) {
+                sparkles.splice(0, sparkles.length - 140);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                tutupModalSertifikat();
+                tutupAstroPopup();
+                isWarping = false;
+            }
+        });
+
+        window.addEventListener('dblclick', (e) => {
+            if (isInteractiveUIElement(e.target)) return;
+            blackHoles.push({
+                x: e.clientX,
+                y: e.clientY,
+                life: 1.0,
+                rotation: 0
+            });
+            if (blackHoles.length > 2) blackHoles.shift();
+            playCosmicBlip(180, 90, 0.35);
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return;
+            if (isInteractiveUIElement(e.target)) return;
+
+            const hitCelestial = celestialHitboxes.some(item => {
+                const dx = e.clientX - item.x;
+                const dy = e.clientY - item.y;
+                return (dx * dx + dy * dy) <= (item.hitRadius * item.hitRadius);
+            });
+
+            if (!hitCelestial) {
+                isWarping = true;
+                playCosmicBlip(220, 520, 0.25);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isWarping = false;
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            if (isInteractiveUIElement(e.target)) return;
+            isWarping = true;
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isWarping = false;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            pointer.x = e.clientX;
+            pointer.y = e.clientY;
+            pointer.active = true;
+
+            spawnSparkles(e.clientX, e.clientY, 2);
+            updateSectorHud(e.clientX, e.clientY);
+
+            if (width > 0 && height > 0) {
+                parallax.targetX = ((e.clientX / width) - 0.5) * 26;
+                parallax.targetY = ((e.clientY / height) - 0.5) * 26;
+            }
+
+            const hoveredAny = celestialHitboxes.some(item => item.hovered);
+            document.body.style.cursor = hoveredAny ? 'pointer' : '';
+        });
+
+        window.addEventListener('mouseleave', () => {
+            pointer.active = false;
+            isWarping = false;
+            parallax.targetX = 0;
+            parallax.targetY = 0;
+            document.body.style.cursor = '';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (astroPopup.contains(e.target)) return;
+
+            const clickedCelestial = celestialHitboxes.find(item => {
+                const dx = e.clientX - item.x;
+                const dy = e.clientY - item.y;
+                return (dx * dx + dy * dy) <= (item.hitRadius * item.hitRadius);
+            });
+
+            if (clickedCelestial) {
+                bukaAstroPopup(clickedCelestial.label, clickedCelestial.color);
+            } else {
+                tutupAstroPopup();
+            }
+        });
+
+        function resizeCanvas() {
+            width = canvas.width = Math.max(1, window.innerWidth);
+            height = canvas.height = Math.max(1, window.innerHeight);
+            centerX = width / 2;
+            centerY = height / 2;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 270; i++) {
+            backgroundStars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.8 + 0.4,
+                alpha: Math.random(),
+                depth: Math.random() * 0.75 + 0.2,
+                twinkleSpeed: (Math.random() * 0.022) + 0.005
+            });
+        }
+
+        function drawAurora(time) {
+            ctx.save();
+            const auroraGrad = ctx.createLinearGradient(0, 0, width, height * 0.22);
+            auroraGrad.addColorStop(0, 'rgba(16, 185, 129, 0.07)');
+            auroraGrad.addColorStop(0.35, 'rgba(56, 189, 248, 0.09)');
+            auroraGrad.addColorStop(0.7, 'rgba(168, 85, 247, 0.08)');
+            auroraGrad.addColorStop(1, 'rgba(3, 0, 20, 0)');
+
+            ctx.fillStyle = auroraGrad;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            for (let x = 0; x <= width; x += 60) {
+                const wave = Math.sin(x * 0.004 + time * 0.0008) * 26 + Math.cos(x * 0.008 - time * 0.0005) * 14;
+                ctx.lineTo(x, height * 0.13 + wave);
+            }
+            ctx.lineTo(width, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        const constellations = [
+            {
+                side: -1,
+                yOffset: 0.40,
+                points: [
+                    { dx: -45, dy: -32 },
+                    { dx: -15, dy: -18 },
+                    { dx: 18, dy: -26 },
+                    { dx: 36, dy: 4 },
+                    { dx: 5, dy: 24 },
+                    { dx: -30, dy: 14 }
+                ],
+                edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 1]]
+            },
+            {
+                side: 1,
+                yOffset: 0.46,
+                points: [
+                    { dx: -38, dy: -22 },
+                    { dx: -8, dy: -35 },
+                    { dx: 24, dy: -14 },
+                    { dx: 12, dy: 18 },
+                    { dx: -22, dy: 28 }
+                ],
+                edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [1, 3]]
+            }
+        ];
+
+        function drawConstellations(time, px, py) {
+            if (width < 720) return;
+
+            constellations.forEach((c, cIdx) => {
+                const baseX = (c.side === -1 ? Math.max(95, centerX - 515) : Math.min(width - 95, centerX + 515)) + px * 0.45;
+                const baseY = height * c.yOffset + py * 0.45;
+                const pulse = 0.28 + 0.16 * Math.sin(time * 0.002 + cIdx);
+
+                ctx.save();
+                ctx.strokeStyle = `rgba(125, 211, 252, ${pulse})`;
+                ctx.lineWidth = 1;
+                c.edges.forEach(([a, b]) => {
+                    ctx.beginPath();
+                    ctx.moveTo(baseX + c.points[a].dx, baseY + c.points[a].dy);
+                    ctx.lineTo(baseX + c.points[b].dx, baseY + c.points[b].dy);
+                    ctx.stroke();
+                });
+
+                c.points.forEach((pt, pIdx) => {
+                    const starTwinkle = 0.55 + 0.45 * Math.sin(time * 0.004 + pIdx + cIdx);
+                    ctx.beginPath();
+                    ctx.arc(baseX + pt.dx, baseY + pt.dy, 2.3, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(224, 242, 254, ${starTwinkle})`;
+                    ctx.fill();
+                });
+                ctx.restore();
+            });
+        }
+
+        const shuttle = {
+            x: -140,
+            speedX: 0.85,
+            baseYRatio: 0.34
+        };
+
+        function drawSpaceShuttle(time, px, py) {
+            shuttle.x += shuttle.speedX;
+            if (shuttle.x > width + 180) {
+                shuttle.x = -180;
+                shuttle.baseYRatio = 0.22 + Math.random() * 0.55;
+            }
+
+            const sx = shuttle.x + px * 0.7;
+            const sy = height * shuttle.baseYRatio + Math.sin(time * 0.0015) * 18 + py * 0.7;
+            const hitRadius = 36;
+            const hovered = isHovered(sx, sy, hitRadius);
+            const scale = hovered ? 1.2 : 1.0;
+
+            celestialHitboxes.push({
+                x: sx,
+                y: sy,
+                hitRadius,
+                label: 'Pesawat Ulang-Alik',
+                color: '#38bdf8',
+                hovered
+            });
+
+            ctx.save();
+            ctx.translate(sx, sy);
+            ctx.scale(scale, scale);
+            ctx.rotate(Math.cos(time * 0.0015) * 0.06);
+
+            const flameLen = 20 + Math.sin(time * 0.03) * 6;
+            const flameGrad = ctx.createLinearGradient(-16, 0, -16 - flameLen, 0);
+            flameGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+            flameGrad.addColorStop(0.4, 'rgba(56, 189, 248, 0.85)');
+            flameGrad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+            ctx.fillStyle = flameGrad;
+            ctx.beginPath();
+            ctx.moveTo(-16, -4);
+            ctx.lineTo(-16 - flameLen, 0);
+            ctx.lineTo(-16, 4);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath();
+            ctx.moveTo(-14, -13);
+            ctx.lineTo(8, 0);
+            ctx.lineTo(-14, 13);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.ellipse(2, 0, 18, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#0284c7';
+            ctx.beginPath();
+            ctx.ellipse(11, -1, 5, 2.5, 0.15, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+            if (hovered) drawHoverRing(sx, sy, 24, '#38bdf8');
+        }
+
+        /* ================= GALAKSI SPIRAL BIMA SAKTI BERLAPIS ================= */
+        const numArms = 2;
+        const numParticles = 920;
+        const galaxyColors = ['#e0f2fe', '#7dd3fc', '#c4b5fd', '#f472b6', '#fde68a', '#ffffff'];
+        const maxGalaxyRadius = Math.max(width, height) * 0.52;
+
+        for (let i = 0; i < numParticles; i++) {
+            const t = Math.pow(Math.random(), 1.25);
+            const distance = t * maxGalaxyRadius;
+            const armIndex = i % numArms;
+            const spiralTwist = distance * 0.0145;
+            const armAngle = (armIndex * Math.PI) + spiralTwist;
+            const armSpread = (0.16 + t * 0.42) * (Math.random() - 0.5) * 2;
+            const isBrightStar = Math.random() < 0.08;
+
+            galaxyParticles.push({
+                distance: distance,
+                angle: armAngle + armSpread,
+                speed: (0.00055 + (0.08 / (distance + 45))) * (0.88 + Math.random() * 0.25),
+                size: isBrightStar ? (Math.random() * 1.6 + 2.2) : (Math.random() * 1.45 + 0.45),
+                color: isBrightStar ? '#ffffff' : galaxyColors[Math.floor(Math.random() * galaxyColors.length)],
+                alpha: isBrightStar ? 0.95 : (Math.random() * 0.62 + 0.16),
+                twinkle: Math.random() * Math.PI * 2,
+                isBrightStar
+            });
+        }
+
+        const dustPalette = [
+            'rgba(56, 189, 248, 0.065)',
+            'rgba(168, 85, 247, 0.065)',
+            'rgba(244, 114, 182, 0.045)',
+            'rgba(129, 140, 248, 0.055)'
+        ];
+        for (let i = 0; i < 64; i++) {
+            const dRatio = Math.pow(Math.random(), 1.15);
+            const dist = dRatio * maxGalaxyRadius * 0.85;
+            const arm = i % numArms;
+            galaxyDustClouds.push({
+                distance: dist,
+                angle: arm * Math.PI + dist * 0.0145 + (Math.random() - 0.5) * 0.45,
+                speed: 0.00045 + (0.05 / (dist + 60)),
+                radiusX: 28 + Math.random() * 54,
+                radiusY: 14 + Math.random() * 28,
+                color: dustPalette[i % dustPalette.length]
+            });
+        }
+
+        function drawMilkyWayGalaxy(galCenterX, galCenterY, time, speedBoost) {
+            const tiltAngle = -0.26;
+            const flattenY = 0.54;
+
+            ctx.save();
+            ctx.translate(galCenterX, galCenterY);
+            ctx.rotate(tiltAngle);
+
+            const outerHalo = ctx.createRadialGradient(0, 0, 8, 0, 0, maxGalaxyRadius * 0.95);
+            outerHalo.addColorStop(0, warpFactor > 0.1 ? 'rgba(125, 211, 252, 0.34)' : 'rgba(254, 240, 138, 0.24)');
+            outerHalo.addColorStop(0.16, 'rgba(192, 132, 252, 0.22)');
+            outerHalo.addColorStop(0.45, 'rgba(56, 189, 248, 0.11)');
+            outerHalo.addColorStop(0.78, 'rgba(129, 140, 248, 0.04)');
+            outerHalo.addColorStop(1, 'rgba(3, 0, 20, 0)');
+            ctx.fillStyle = outerHalo;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, maxGalaxyRadius * 0.96, maxGalaxyRadius * 0.96 * flattenY, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            galaxyDustClouds.forEach(cloud => {
+                cloud.angle += cloud.speed * speedBoost;
+                const cx = Math.cos(cloud.angle) * cloud.distance;
+                const cy = Math.sin(cloud.angle) * cloud.distance * flattenY;
+                const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, cloud.radiusX);
+                grad.addColorStop(0, cloud.color);
+                grad.addColorStop(1, 'rgba(3, 0, 20, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, cloud.radiusX, cloud.radiusY, cloud.angle, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            galaxyParticles.forEach(p => {
+                p.angle += p.speed * speedBoost;
+                const pxPos = Math.cos(p.angle) * p.distance;
+                const pyPos = Math.sin(p.angle) * p.distance * flattenY;
+                const pulseAlpha = p.alpha * (0.78 + 0.22 * Math.sin(time * 0.003 + p.twinkle));
+
+                ctx.beginPath();
+                ctx.arc(pxPos, pyPos, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0.05, Math.min(1, pulseAlpha));
+                ctx.fill();
+
+                if (p.isBrightStar) {
+                    ctx.strokeStyle = `rgba(224, 242, 254, ${pulseAlpha * 0.55})`;
+                    ctx.lineWidth = 0.8;
+                    const cross = p.size * 2.4;
+                    ctx.beginPath();
+                    ctx.moveTo(pxPos - cross, pyPos);
+                    ctx.lineTo(pxPos + cross, pyPos);
+                    ctx.moveTo(pxPos, pyPos - cross);
+                    ctx.lineTo(pxPos, pyPos + cross);
+                    ctx.stroke();
+                }
+            });
+            ctx.globalAlpha = 1;
+
+            const coreGlow = ctx.createRadialGradient(0, 0, 2, 0, 0, 74);
+            coreGlow.addColorStop(0, 'rgba(255, 255, 255, 0.92)');
+            coreGlow.addColorStop(0.28, 'rgba(253, 224, 71, 0.45)');
+            coreGlow.addColorStop(0.65, 'rgba(192, 132, 252, 0.18)');
+            coreGlow.addColorStop(1, 'rgba(3, 0, 20, 0)');
+            ctx.fillStyle = coreGlow;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 92, 48, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function spawnMeteor() {
+            const fromLeft = Math.random() > 0.35;
+            meteors.push({
+                x: fromLeft ? Math.random() * width * 0.85 : width * (0.35 + Math.random() * 0.65),
+                y: Math.random() * height * 0.42,
+                speedX: fromLeft ? (Math.random() * 6.5 + 6.5) : -(Math.random() * 6.5 + 6.5),
+                speedY: Math.random() * 4.8 + 4.5,
+                width: Math.random() * 2.2 + 3.4,
+                alpha: 1
+            });
+        }
+
+        setInterval(() => {
+            if (meteors.length < 5) spawnMeteor();
+        }, 1400);
+        spawnMeteor();
+
+        function spawnComet() {
+            const fromLeft = Math.random() > 0.5;
+            comets.push({
+                x: fromLeft ? -120 : width + 120,
+                y: height * (0.08 + Math.random() * 0.35),
+                speedX: fromLeft ? (Math.random() * 1.1 + 1.1) : -(Math.random() * 1.1 + 1.1),
+                speedY: Math.random() * 0.45 + 0.25,
+                alpha: 0.92
+            });
+        }
+
+        setInterval(() => {
+            if (comets.length < 2) spawnComet();
+        }, 9500);
+        spawnComet();
+
+        function isHovered(x, y, hitRadius) {
+            if (!pointer.active) return false;
+            const dx = pointer.x - x;
+            const dy = pointer.y - y;
+            return (dx * dx + dy * dy) <= (hitRadius * hitRadius);
+        }
+
+        function drawHoverRing(x, y, r, color = '#38bdf8') {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([6, 5]);
+            ctx.beginPath();
+            ctx.arc(x, y, r + 9, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawDetailedEarth(x, y, r, time, hovered) {
+            const drawR = hovered ? r * 1.12 : r;
+            ctx.save();
+            ctx.translate(x, y);
+
+            const atmo = ctx.createRadialGradient(0, 0, drawR * 0.85, 0, 0, drawR * 1.65);
+            atmo.addColorStop(0, hovered ? 'rgba(56, 189, 248, 0.55)' : 'rgba(56, 189, 248, 0.36)');
+            atmo.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = atmo;
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR * 1.65, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR, 0, Math.PI * 2);
+            ctx.clip();
+
+            const oceanGrad = ctx.createRadialGradient(-drawR * 0.3, -drawR * 0.3, drawR * 0.1, 0, 0, drawR * 1.15);
+            oceanGrad.addColorStop(0, '#38bdf8');
+            oceanGrad.addColorStop(0.55, '#0284c7');
+            oceanGrad.addColorStop(1, '#0c2461');
+            ctx.fillStyle = oceanGrad;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.82)';
+            ctx.beginPath();
+            ctx.ellipse(-drawR * 0.25, -drawR * 0.15, drawR * 0.42, drawR * 0.28, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(21, 128, 61, 0.85)';
+            ctx.beginPath();
+            ctx.ellipse(drawR * 0.28, drawR * 0.22, drawR * 0.35, drawR * 0.26, 0.4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(drawR * 0.08, -drawR * 0.45, drawR * 0.28, drawR * 0.16, 0.15, 0, Math.PI * 2);
+            ctx.fill();
+
+            const cloudDrift = Math.sin(time * 0.0005) * (drawR * 0.12);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+            ctx.lineWidth = Math.max(2.5, drawR * 0.08);
+            ctx.beginPath();
+            ctx.moveTo(-drawR + cloudDrift, -drawR * 0.28);
+            ctx.quadraticCurveTo(0, -drawR * 0.42, drawR + cloudDrift, -drawR * 0.18);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-drawR - cloudDrift, drawR * 0.12);
+            ctx.quadraticCurveTo(0, drawR * 0.02, drawR - cloudDrift, drawR * 0.26);
+            ctx.stroke();
+
+            const shadowGrad = ctx.createLinearGradient(-drawR * 0.6, -drawR * 0.4, drawR * 0.95, drawR * 0.9);
+            shadowGrad.addColorStop(0, 'rgba(2, 6, 23, 0)');
+            shadowGrad.addColorStop(0.65, 'rgba(2, 6, 23, 0.38)');
+            shadowGrad.addColorStop(1, 'rgba(2, 6, 23, 0.85)');
+            ctx.fillStyle = shadowGrad;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            ctx.restore();
+            if (hovered) drawHoverRing(x, y, drawR, '#38bdf8');
+        }
+
+        function drawDetailedMoon(x, y, r, hovered) {
+            const drawR = hovered ? r * 1.14 : r;
+            ctx.save();
+            ctx.translate(x, y);
+
+            const moonGlow = ctx.createRadialGradient(0, 0, drawR * 0.8, 0, 0, drawR * 1.5);
+            moonGlow.addColorStop(0, hovered ? 'rgba(226, 232, 240, 0.38)' : 'rgba(226, 232, 240, 0.22)');
+            moonGlow.addColorStop(1, 'rgba(226, 232, 240, 0)');
+            ctx.fillStyle = moonGlow;
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR * 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR, 0, Math.PI * 2);
+            ctx.clip();
+
+            const moonGrad = ctx.createRadialGradient(-drawR * 0.35, -drawR * 0.35, drawR * 0.1, 0, 0, drawR * 1.15);
+            moonGrad.addColorStop(0, '#f1f5f9');
+            moonGrad.addColorStop(0.6, '#94a3b8');
+            moonGrad.addColorStop(1, '#334155');
+            ctx.fillStyle = moonGrad;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            const craters = [
+                { cx: -0.25, cy: -0.2, cr: 0.22 },
+                { cx: 0.22, cy: -0.28, cr: 0.15 },
+                { cx: 0.12, cy: 0.18, cr: 0.24 },
+                { cx: -0.32, cy: 0.28, cr: 0.14 },
+                { cx: 0.36, cy: 0.02, cr: 0.11 }
+            ];
+            craters.forEach(c => {
+                ctx.fillStyle = 'rgba(51, 65, 85, 0.45)';
+                ctx.beginPath();
+                ctx.arc(c.cx * drawR, c.cy * drawR, c.cr * drawR, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(248, 250, 252, 0.35)';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(c.cx * drawR - 1.2, c.cy * drawR - 1.2, c.cr * drawR, Math.PI * 0.8, Math.PI * 1.8);
+                ctx.stroke();
+            });
+
+            const shade = ctx.createLinearGradient(-drawR * 0.5, -drawR * 0.4, drawR, drawR);
+            shade.addColorStop(0, 'rgba(3, 7, 18, 0)');
+            shade.addColorStop(1, 'rgba(3, 7, 18, 0.78)');
+            ctx.fillStyle = shade;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            ctx.restore();
+            if (hovered) drawHoverRing(x, y, drawR, '#e2e8f0');
+        }
+
+        function drawDetailedMars(x, y, r, hovered) {
+            const drawR = hovered ? r * 1.12 : r;
+            ctx.save();
+            ctx.translate(x, y);
+
+            const marsGlow = ctx.createRadialGradient(0, 0, drawR * 0.8, 0, 0, drawR * 1.58);
+            marsGlow.addColorStop(0, hovered ? 'rgba(251, 113, 133, 0.5)' : 'rgba(251, 113, 133, 0.32)');
+            marsGlow.addColorStop(1, 'rgba(251, 113, 133, 0)');
+            ctx.fillStyle = marsGlow;
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR * 1.58, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR, 0, Math.PI * 2);
+            ctx.clip();
+
+            const marsGrad = ctx.createRadialGradient(-drawR * 0.35, -drawR * 0.35, drawR * 0.1, 0, 0, drawR * 1.15);
+            marsGrad.addColorStop(0, '#fda4af');
+            marsGrad.addColorStop(0.45, '#e11d48');
+            marsGrad.addColorStop(1, '#7f1d1d');
+            ctx.fillStyle = marsGrad;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            ctx.fillStyle = 'rgba(127, 29, 29, 0.45)';
+            ctx.beginPath();
+            ctx.ellipse(0.15 * drawR, -0.1 * drawR, 0.48 * drawR, 0.22 * drawR, -0.25, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(-0.2 * drawR, 0.28 * drawR, 0.36 * drawR, 0.16 * drawR, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 241, 242, 0.65)';
+            ctx.beginPath();
+            ctx.ellipse(0, -drawR * 0.92, drawR * 0.32, drawR * 0.12, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            const shade = ctx.createLinearGradient(-drawR * 0.5, -drawR * 0.3, drawR, drawR);
+            shade.addColorStop(0, 'rgba(15, 2, 8, 0)');
+            shade.addColorStop(1, 'rgba(15, 2, 8, 0.8)');
+            ctx.fillStyle = shade;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            ctx.restore();
+            if (hovered) drawHoverRing(x, y, drawR, '#fb7185');
+        }
+
+        function drawDetailedSaturn(x, y, r, tilt = -0.34, hovered = false) {
+            const drawR = hovered ? r * 1.12 : r;
+            ctx.save();
+            ctx.translate(x, y);
+
+            ctx.save();
+            ctx.rotate(tilt);
+            [2.35, 1.95, 1.62].forEach((mult, idx) => {
+                ctx.beginPath();
+                ctx.ellipse(0, 0, drawR * mult, drawR * mult * 0.26, 0, Math.PI, Math.PI * 2);
+                ctx.strokeStyle = idx === 0 ? 'rgba(253, 230, 138, 0.38)' : idx === 1 ? 'rgba(245, 158, 11, 0.6)' : 'rgba(254, 243, 199, 0.38)';
+                ctx.lineWidth = Math.max(2.5, drawR * 0.11);
+                ctx.stroke();
+            });
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, drawR, 0, Math.PI * 2);
+            ctx.clip();
+
+            const satGrad = ctx.createLinearGradient(0, -drawR, 0, drawR);
+            satGrad.addColorStop(0, '#fef08a');
+            satGrad.addColorStop(0.35, '#f59e0b');
+            satGrad.addColorStop(0.7, '#d97706');
+            satGrad.addColorStop(1, '#78350f');
+            ctx.fillStyle = satGrad;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+
+            const shade = ctx.createLinearGradient(-drawR * 0.4, -drawR * 0.3, drawR, drawR);
+            shade.addColorStop(0, 'rgba(15, 10, 2, 0)');
+            shade.addColorStop(1, 'rgba(15, 10, 2, 0.72)');
+            ctx.fillStyle = shade;
+            ctx.fillRect(-drawR, -drawR, drawR * 2, drawR * 2);
+            ctx.restore();
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(tilt);
+            [2.35, 1.95, 1.62].forEach((mult, idx) => {
+                ctx.beginPath();
+                ctx.ellipse(0, 0, drawR * mult, drawR * mult * 0.26, 0, 0, Math.PI);
+                ctx.strokeStyle = idx === 0 ? 'rgba(253, 230, 138, 0.48)' : idx === 1 ? 'rgba(251, 191, 36, 0.76)' : 'rgba(254, 243, 199, 0.45)';
+                ctx.lineWidth = Math.max(2.5, drawR * 0.11);
+                ctx.stroke();
+            });
+            ctx.restore();
+
+            if (hovered) drawHoverRing(x, y, drawR * 1.45, '#fbbf24');
+        }
+
+        const satellites = [
+            { name: 'Satelit #1', side: -1, yRatio: 0.48, speed: 0.0028, phase: 0.4, scale: 1.45, accent: '#38bdf8' },
+            { name: 'Satelit #2', side: 1, yRatio: 0.54, speed: 0.0022, phase: 2.1, scale: 1.55, accent: '#f472b6' },
+            { name: 'Satelit #3', side: -1, yRatio: 0.86, speed: 0.0025, phase: 4.2, scale: 1.38, accent: '#c084fc' }
+        ];
+
+        function drawSatellites(time, px, py) {
+            if (width < 640) return;
+
+            satellites.forEach((sat, idx) => {
+                const t = time * 0.001 * sat.speed * 180 + sat.phase;
+                const wingSpan = Math.max(120, Math.min(260, (width - 920) * 0.42));
+                const baseX = sat.side === -1
+                    ? Math.max(105, centerX - 500)
+                    : Math.min(width - 105, centerX + 500);
+
+                const sx = baseX + Math.sin(t) * (wingSpan * 0.35) + px * 0.85;
+                const sy = height * sat.yRatio + Math.cos(t * 1.3) * 28 + py * 0.85;
+                const hitRadius = 52 * sat.scale;
+                const hovered = isHovered(sx, sy, hitRadius);
+                const drawScale = hovered ? sat.scale * 1.18 : sat.scale;
+
+                celestialHitboxes.push({ x: sx, y: sy, hitRadius, label: sat.name, color: sat.accent, hovered });
+
+                ctx.save();
+                ctx.translate(sx, sy);
+                ctx.scale(drawScale, drawScale);
+                ctx.rotate(Math.sin(t * 0.8) * 0.28);
+
+                if (hovered) {
+                    ctx.strokeStyle = sat.accent;
+                    ctx.lineWidth = 1.6;
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeRect(-40, -16, 80, 32);
+                    ctx.setLineDash([]);
+                }
+
+                [-34, 12].forEach(pxRect => {
+                    ctx.fillStyle = 'rgba(14, 165, 233, 0.78)';
+                    ctx.strokeStyle = '#e2e8f0';
+                    ctx.lineWidth = 1.1;
+                    ctx.fillRect(pxRect, -6, 22, 12);
+                    ctx.strokeRect(pxRect, -6, 22, 12);
+
+                    ctx.strokeStyle = 'rgba(224, 242, 254, 0.55)';
+                    ctx.lineWidth = 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(pxRect + 7, -6); ctx.lineTo(pxRect + 7, 6);
+                    ctx.moveTo(pxRect + 14, -6); ctx.lineTo(pxRect + 14, 6);
+                    ctx.moveTo(pxRect, 0); ctx.lineTo(pxRect + 22, 0);
+                    ctx.stroke();
+                });
+
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-12, 0); ctx.lineTo(12, 0);
+                ctx.stroke();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 1.2;
+                ctx.fillRect(-9, -8, 18, 16);
+                ctx.strokeRect(-9, -8, 18, 16);
+
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.arc(0, 11, 7, 0.15 * Math.PI, 0.85 * Math.PI);
+                ctx.stroke();
+
+                const blink = 0.45 + 0.55 * Math.abs(Math.sin(time * 0.005 + idx));
+                ctx.beginPath();
+                ctx.arc(0, -11, 3.2, 0, Math.PI * 2);
+                ctx.fillStyle = sat.accent;
+                ctx.globalAlpha = blink;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                ctx.restore();
+            });
+        }
+
+        function drawHoverTooltip(item) {
+            if (!item || !item.hovered) return;
+
+            ctx.save();
+            ctx.font = '600 12px Poppins, sans-serif';
+            const hint = `${item.label} • Klik untuk info`;
+            const padX = 12;
+            const textWidth = ctx.measureText(hint).width;
+            const boxW = textWidth + padX * 2;
+            const boxH = 26;
+            const boxX = Math.min(width - boxW - 12, Math.max(12, pointer.x + 14));
+            const boxY = Math.min(height - boxH - 12, Math.max(12, pointer.y - 32));
+
+            ctx.fillStyle = 'rgba(9, 13, 38, 0.92)';
+            ctx.strokeStyle = item.color;
+            ctx.lineWidth = 1.4;
+            roundRectPath(ctx, boxX, boxY, boxW, boxH, 8);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(hint, boxX + padX, boxY + boxH / 2 + 0.5);
+            ctx.restore();
+        }
+
+        function animateCosmos(time = 0) {
+            celestialHitboxes.length = 0;
+
+            const targetWarp = isWarping ? 1 : 0;
+            warpFactor += (targetWarp - warpFactor) * 0.08;
+
+            const scrollOffset = (window.scrollY || 0) * -0.05;
+            parallax.currentX += (parallax.targetX - parallax.currentX) * 0.06;
+            parallax.currentY += ((parallax.targetY + scrollOffset) - parallax.currentY) * 0.06;
+
+            const px = parallax.currentX;
+            const py = parallax.currentY;
+
+            ctx.fillStyle = '#030014';
+            ctx.fillRect(0, 0, width, height);
+
+            drawAurora(time);
+
+            const galCenterX = centerX + px * 0.55;
+            const galCenterY = centerY + py * 0.55;
+
+            backgroundStars.forEach(star => {
+                star.alpha += star.twinkleSpeed;
+                if (star.alpha > 1 || star.alpha < 0.15) {
+                    star.twinkleSpeed = -star.twinkleSpeed;
+                }
+
+                if (warpFactor > 0.02) {
+                    const dx = star.x - centerX;
+                    const dy = star.y - centerY;
+                    star.x += dx * 0.032 * warpFactor * star.depth;
+                    star.y += dy * 0.032 * warpFactor * star.depth;
+
+                    if (star.x < 0 || star.x > width || star.y < 0 || star.y > height) {
+                        star.x = centerX + (Math.random() - 0.5) * 140;
+                        star.y = centerY + (Math.random() - 0.5) * 140;
+                    }
+                }
+
+                const sx = ((star.x + px * star.depth) % width + width) % width;
+                const sy = ((star.y + py * star.depth) % height + height) % height;
+
+                if (warpFactor > 0.06) {
+                    const angle = Math.atan2(sy - centerY, sx - centerX);
+                    const streakLen = (14 + star.depth * 32) * warpFactor;
+                    ctx.strokeStyle = `rgba(186, 230, 253, ${Math.min(1, star.alpha + 0.2)})`;
+                    ctx.lineWidth = star.radius * 1.15;
+                    ctx.beginPath();
+                    ctx.moveTo(sx, sy);
+                    ctx.lineTo(sx - Math.cos(angle) * streakLen, sy - Math.sin(angle) * streakLen);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                    ctx.fill();
+                }
+            });
+
+            drawConstellations(time, px, py);
+
+            if (width >= 640) {
+                const leftX = Math.max(105, centerX - 515) + px * 0.9;
+                const rightX = Math.min(width - 105, centerX + 515) + px * 0.9;
+
+                const earthX = leftX;
+                const earthY = height * 0.20 + py * 0.8;
+                const earthR = 52;
+                const earthHit = earthR + 14;
+                const earthHover = isHovered(earthX, earthY, earthHit);
+                celestialHitboxes.push({ x: earthX, y: earthY, hitRadius: earthHit, label: 'Bumi', color: '#38bdf8', hovered: earthHover });
+                drawDetailedEarth(earthX, earthY, earthR, time, earthHover);
+
+                const moon1X = leftX + 68;
+                const moon1Y = height * 0.13 + py * 0.8;
+                const moon1R = 18;
+                const moon1Hit = moon1R + 12;
+                const moon1Hover = isHovered(moon1X, moon1Y, moon1Hit);
+                celestialHitboxes.push({ x: moon1X, y: moon1Y, hitRadius: moon1Hit, label: 'Bulan', color: '#e2e8f0', hovered: moon1Hover });
+                drawDetailedMoon(moon1X, moon1Y, moon1R, moon1Hover);
+
+                const saturnX = leftX + 10;
+                const saturnY = height * 0.70 + py * 0.8;
+                const saturnR = 36;
+                const saturnHit = saturnR * 2.1;
+                const saturnHover = isHovered(saturnX, saturnY, saturnHit);
+                celestialHitboxes.push({ x: saturnX, y: saturnY, hitRadius: saturnHit, label: 'Saturnus', color: '#fbbf24', hovered: saturnHover });
+                drawDetailedSaturn(saturnX, saturnY, saturnR, -0.34, saturnHover);
+
+                const marsX = rightX;
+                const marsY = height * 0.24 + py * 0.8;
+                const marsR = 46;
+                const marsHit = marsR + 14;
+                const marsHover = isHovered(marsX, marsY, marsHit);
+                celestialHitboxes.push({ x: marsX, y: marsY, hitRadius: marsHit, label: 'Mars', color: '#fb7185', hovered: marsHover });
+                drawDetailedMars(marsX, marsY, marsR, marsHover);
+
+                const moon2X = rightX - 18;
+                const moon2Y = height * 0.74 + py * 0.8;
+                const moon2R = 28;
+                const moon2Hit = moon2R + 12;
+                const moon2Hover = isHovered(moon2X, moon2Y, moon2Hit);
+                celestialHitboxes.push({ x: moon2X, y: moon2Y, hitRadius: moon2Hit, label: 'Bulan', color: '#e2e8f0', hovered: moon2Hover });
+                drawDetailedMoon(moon2X, moon2Y, moon2R, moon2Hover);
+            }
+
+            drawSatellites(time, px, py);
+            drawSpaceShuttle(time, px, py);
+
+            const speedBoost = 1 + warpFactor * 6.5;
+            drawMilkyWayGalaxy(galCenterX, galCenterY, time, speedBoost);
+
+            for (let i = blackHoles.length - 1; i >= 0; i--) {
+                const bh = blackHoles[i];
+                bh.rotation += 0.08;
+                bh.life -= 0.004;
+
+                if (bh.life <= 0) {
+                    blackHoles.splice(i, 1);
+                    continue;
+                }
+
+                const scaleBH = Math.sin(Math.min(1, bh.life) * Math.PI * 0.5);
+                const eventHorizonR = 16 * scaleBH;
+
+                sparkles.forEach(sp => {
+                    const dx = bh.x - sp.x;
+                    const dy = bh.y - sp.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 180 && dist > 4) {
+                        sp.vx += (dx / dist) * 0.35;
+                        sp.vy += (dy / dist) * 0.35;
+                    }
+                });
+
+                ctx.save();
+                ctx.translate(bh.x, bh.y);
+                ctx.globalAlpha = Math.min(1, bh.life * 1.4);
+
+                ctx.save();
+                ctx.rotate(bh.rotation);
+                const diskGrad = ctx.createRadialGradient(0, 0, eventHorizonR * 0.9, 0, 0, eventHorizonR * 3.2);
+                diskGrad.addColorStop(0, 'rgba(251, 191, 36, 0.9)');
+                diskGrad.addColorStop(0.45, 'rgba(168, 85, 247, 0.65)');
+                diskGrad.addColorStop(0.8, 'rgba(56, 189, 248, 0.25)');
+                diskGrad.addColorStop(1, 'rgba(3, 0, 20, 0)');
+                ctx.fillStyle = diskGrad;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, eventHorizonR * 3.2, eventHorizonR * 1.35, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                ctx.beginPath();
+                ctx.arc(0, 0, eventHorizonR, 0, Math.PI * 2);
+                ctx.fillStyle = '#020008';
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#fde68a';
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            for (let i = comets.length - 1; i >= 0; i--) {
+                const c = comets[i];
+                const tailX = c.x - c.speedX * 95;
+                const tailY = c.y - c.speedY * 95;
+
+                const cometGrad = ctx.createLinearGradient(c.x, c.y, tailX, tailY);
+                cometGrad.addColorStop(0, 'rgba(167, 243, 208, 0.85)');
+                cometGrad.addColorStop(0.35, 'rgba(56, 189, 248, 0.42)');
+                cometGrad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+
+                ctx.strokeStyle = cometGrad;
+                ctx.lineWidth = 7;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(c.x, c.y);
+                ctx.lineTo(tailX, tailY);
+                ctx.stroke();
+
+                const comaGlow = ctx.createRadialGradient(c.x, c.y, 1, c.x, c.y, 16);
+                comaGlow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+                comaGlow.addColorStop(0.5, 'rgba(110, 231, 183, 0.45)');
+                comaGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                ctx.fillStyle = comaGlow;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, 16, 0, Math.PI * 2);
+                ctx.fill();
+
+                c.x += c.speedX;
+                c.y += c.speedY;
+
+                if (c.x < -260 || c.x > width + 260 || c.y > height + 200) {
+                    comets.splice(i, 1);
+                }
+            }
+
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                const tailX = m.x - (m.speedX * 11);
+                const tailY = m.y - (m.speedY * 11);
+
+                const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
+                grad.addColorStop(0, `rgba(255, 255, 255, ${m.alpha})`);
+                grad.addColorStop(0.35, `rgba(125, 211, 252, ${m.alpha * 0.75})`);
+                grad.addColorStop(0.75, `rgba(192, 132, 252, ${m.alpha * 0.35})`);
+                grad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = m.width;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(tailX, tailY);
+                ctx.stroke();
+
+                const headGlow = ctx.createRadialGradient(m.x, m.y, 1, m.x, m.y, 12);
+                headGlow.addColorStop(0, `rgba(255, 255, 255, ${m.alpha})`);
+                headGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
+                ctx.fillStyle = headGlow;
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, 3.8, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${m.alpha})`;
+                ctx.fill();
+
+                m.x += m.speedX;
+                m.y += m.speedY;
+                m.alpha -= 0.01;
+
+                if (m.alpha <= 0 || m.x < -160 || m.x > width + 160 || m.y > height + 160) {
+                    meteors.splice(i, 1);
+                }
+            }
+
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                const sp = sparkles[i];
+                sp.x += sp.vx;
+                sp.y += sp.vy;
+                sp.alpha -= 0.024;
+                sp.size *= 0.985;
+
+                if (sp.alpha <= 0 || sp.size <= 0.2) {
+                    sparkles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = sp.alpha;
+                ctx.fillStyle = sp.color;
+                ctx.beginPath();
+                ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            const activeHover = celestialHitboxes.find(item => item.hovered);
+            if (activeHover) {
+                drawHoverTooltip(activeHover);
+            }
+
+            requestAnimationFrame(animateCosmos);
+        }
+
+        updateSectorHud(window.innerWidth / 2, window.innerHeight / 2);
+        requestAnimationFrame(animateCosmos);
+    </script>
+
+</body>
+</html>
